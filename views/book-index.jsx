@@ -3,7 +3,7 @@ const { useState, useEffect } = React
 import { BookDetails } from './book-details.jsx'
 import { BookFilter } from '../cmps/book-filter.jsx'
 import { BookList } from '../cmps/book-list.jsx'
-import { UserMsg } from '../cmps/user-msg.jsx'
+import { showSuccessMsg } from '../services/event-bus.service.js'
 import { Loader } from '../cmps/loader.jsx'
 
 import { bookService } from '../services/book.service.js'
@@ -12,7 +12,6 @@ export function BookIndex() {
   const [books, setBooks] = useState(null)
   const [selectedBook, setSelectedBook] = useState(null)
   const [filterBy, setFilterBy] = useState(bookService.getDefaultFilter())
-  const [userMsg, setUserMsg] = useState('')
 
   useEffect(() => {
     loadBooks()
@@ -30,7 +29,7 @@ export function BookIndex() {
     bookService.remove(bookId).then(() => {
       const updatedBooks = books.filter((book) => book.id !== bookId)
       setBooks(updatedBooks)
-      flashMsg('Book removed!')
+      showSuccessMsg('Book Removed!')
     })
   }
 
@@ -40,18 +39,10 @@ export function BookIndex() {
     })
   }
 
-  function flashMsg(msg) {
-    setUserMsg(msg)
-    setTimeout(() => {
-      setUserMsg('')
-    }, 3000)
-  }
-
   if (!books) return <Loader />
 
   return (
     <section className="book-index ">
-      {userMsg && <UserMsg msg={userMsg} />}
       {!selectedBook && (
         <div>
           <h1>Hello from Books Index!</h1>
