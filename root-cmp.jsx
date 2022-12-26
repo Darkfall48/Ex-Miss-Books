@@ -1,36 +1,27 @@
 const { useState } = React
-
-import { About } from './views/about.jsx'
-import { BookIndex } from './views/book-index.jsx'
+import { AppHeader } from './cmps/app-header.jsx'
 import { Home } from './views/home.jsx'
+import { BookIndex } from './views/book-index.jsx'
+import { About } from './views/about.jsx'
 
 export function App() {
-  const [page, setPage] = useState('home')
-  console.log('Current page is', page)
+  const [page, setPage] = useState('book')
+
+  function onSetPage(ev, page) {
+    ev.preventDefault()
+    setPage(page)
+  }
 
   return (
     <section className="main-layout app">
       <header className="app-header full main-layout">
-        <h1>Miss Book</h1>
-        <nav className="app-nav">
-          <a href="#" onClick={() => setPage('home')}>
-            Home
-          </a>{' '}
-          |
-          <a href="#" onClick={() => setPage('about')}>
-            About
-          </a>{' '}
-          |
-          <a href="#" onClick={() => setPage('book')}>
-            Books
-          </a>
-        </nav>
+        <AppHeader onSetPage={onSetPage} />
       </header>
 
       <main>
         {page === 'home' && <Home />}
-        {page === 'about' && <About />}
         {page === 'book' && <BookIndex />}
+        {page === 'about' && <About />}
       </main>
     </section>
   )
