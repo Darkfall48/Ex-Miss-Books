@@ -8,6 +8,17 @@
 @import 'base/layout.css';
 @import 'base/forms.css';
 
+/* Views */
+@import 'views/about.css';
+@import 'views/book-index.css';
+@import 'views/home.css';
+
 /* Components */
 @import 'cmps/app-header.css';
+@import 'cmps/book-details.css';
+@import 'cmps/book-filter.css';
+@import 'cmps/book-list.css';
+@import 'cmps/book-preview.css';
+@import 'cmps/loader.css';
+@import 'cmps/long-txt.css';
 @import 'cmps/user-msg.css';
