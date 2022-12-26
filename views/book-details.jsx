@@ -1,12 +1,40 @@
-import { LongTxt } from '../cmps/long-txt.jsx'
+const { useEffect, useState } = React
 
-export function BookDetails({ book, onGoBack }) {
+const { useParams, useNavigate } = ReactRouterDOM
+
+import { LongTxt } from '../cmps/long-txt.jsx'
+import { bookService } from '../services/book.service.js'
+
+export function BookDetails() {
+  const [book, setBook] = useState(null)
+  const params = useParams()
+  const navigate = useNavigate()
+  console.log('Param:', params)
+
+  useEffect(() => {
+    loadBook()
+  }, [])
+
   const date = new Date().getFullYear()
-  const bookPageCount = checkBookReading()
-  const bookPublishedAt = checkBookPublishYear()
-  const bookDynClass = checkBookPrice()
+
+  function loadBook() {
+    bookService
+      .get(params.bookId)
+      .then((book) => setBook(book))
+      .catch((err) => {
+        console.log('Had issue with:', err)
+        onGoBack()
+      })
+  }
+
+  function onGoBack() {
+    navigate('/book')
+  }
 
   function checkBookReading() {
+    if (!book) console.log('No Book', book)
+    console.log('Book:', book)
+
     let strPagesCount = ''
     if (book.pageCount > 500)
       strPagesCount = book.pageCount + ' Serious Reading'
@@ -35,18 +63,21 @@ export function BookDetails({ book, onGoBack }) {
     return dynClass
   }
 
+  if (!book) return <div>Loading...</div>
   return (
     <section className="book-details">
-      <h2>Title : {book.title}</h2>
-      <h3>Subtitle : {book.subtitle}</h3>
-      <h3>
-        Price:{' '}
-        <span className={bookDynClass}>
-          {book.listPrice.amount} {book.listPrice.currencyCode}
-        </span>
+      <h2>{book.title}</h2>
+      <h3>{book.subtitle}</h3>
+      <h3 className={`${checkBookPrice()}`}>
+        {book.listPrice.amount} {book.listPrice.currencyCode}
       </h3>
-      <h4>Published At: {bookPublishedAt}</h4>
-      <h4>Pages Count: {bookPageCount}</h4>
+      <h4>Authors: {book.authors.map((category) => category).join(', ')}</h4>
+      <h4>
+        Categories: {book.categories.map((category) => category).join(', ')}
+      </h4>
+      <h4>Pages Count: {checkBookReading()}</h4>
+      <h4>Language: {book.language}</h4>
+      <h4>Published At: {checkBookPublishYear()}</h4>
       {book.listPrice.isOnSale && (
         <h2 className="green">On Sale Right Now ! </h2>
       )}

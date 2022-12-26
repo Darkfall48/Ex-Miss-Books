@@ -1,8 +1,8 @@
 const { useState, useEffect } = React
 
+import { BookDetails } from './book-details.jsx'
 import { BookFilter } from '../cmps/book-filter.jsx'
 import { BookList } from '../cmps/book-list.jsx'
-import { BookDetails } from '../cmps/book-details.jsx'
 import { UserMsg } from '../cmps/user-msg.jsx'
 import { Loader } from '../cmps/loader.jsx'
 
