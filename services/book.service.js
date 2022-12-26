@@ -4,7 +4,7 @@ import { storageService } from './async-storage.service.js'
 const STORAGE_BOOK_KEY = 'bookDB'
 _createBooks()
 
-export const booksService = {
+export const bookService = {
   query,
   get,
   remove,
