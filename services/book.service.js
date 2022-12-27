@@ -21,6 +21,26 @@ function query(filterBy = getDefaultFilter()) {
     if (filterBy.maxPrice) {
       books = books.filter((book) => book.listPrice.amount <= filterBy.maxPrice)
     }
+    if (filterBy.lang) {
+      const regex = new RegExp(filterBy.lang, 'i')
+      books = books.filter((book) => regex.test(book.language))
+    }
+    if (filterBy.author) {
+      const regex = new RegExp(filterBy.author, 'i')
+      books = books.filter((book) => regex.test(book.authors))
+    }
+    if (filterBy.categories) {
+      const regex = new RegExp(filterBy.categories, 'i')
+      console.log(regex)
+      books = books.filter((book) => regex.test(book.categories))
+    }
+    if (filterBy.date) {
+      books = books.filter((book) => book.publishedDate >= filterBy.date)
+    }
+    if (filterBy.page) {
+      books = books.filter((book) => book.pageCount <= filterBy.page)
+    }
+
     return books
   })
 }
@@ -42,7 +62,15 @@ function save(book) {
 }
 
 function getDefaultFilter() {
-  return { txt: '', maxPrice: '' }
+  return {
+    txt: '',
+    maxPrice: '',
+    lang: '',
+    author: '',
+    date: '',
+    page: '',
+    categories: '',
+  }
 }
 
 function _createBooks() {
@@ -113,7 +141,7 @@ function _createBooks() {
         description:
           'interdum inceptos mauris habitant primis neque tempus lacus morbi auctor cras consectetur euismod vehicula neque netus enim vivamus augue molestie imperdiet tincidunt aliquam',
         pageCount: 303,
-        categories: ['Computers', 'Hack'],
+        categories: ['Computers', 'Hack', 'Games'],
         thumbnail: 'http://coding-academy.org/books-photos/16.jpg',
         language: 'en',
         listPrice: {

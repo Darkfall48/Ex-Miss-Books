@@ -57,10 +57,10 @@ export function BookDetails() {
   }
 
   function checkBookPrice() {
-    let dynClass = ''
-    if (book.listPrice.amount > 150) dynClass = 'red'
-    else if (book.listPrice.amount < 20) dynClass = 'green'
-    return dynClass
+    let coloredClass = ''
+    if (book.listPrice.amount > 150) coloredClass = 'red'
+    else if (book.listPrice.amount < 20) coloredClass = 'green'
+    return coloredClass
   }
 
   if (!book) return <div>Loading...</div>
