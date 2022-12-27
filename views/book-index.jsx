@@ -55,12 +55,7 @@ export function BookIndex() {
         </div>
       )}
 
-      {selectedBook && (
-        <BookDetails
-          book={selectedBook}
-          onGoBack={() => setSelectedBook(null)}
-        />
-      )}
+      {selectedBook && <BookDetails />}
     </section>
   )
 }

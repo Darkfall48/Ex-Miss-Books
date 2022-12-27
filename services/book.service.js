@@ -10,6 +10,7 @@ export const bookService = {
   remove,
   save,
   getDefaultFilter,
+  getEmptyBook,
 }
 
 function query(filterBy = getDefaultFilter()) {
@@ -59,6 +60,10 @@ function save(book) {
   } else {
     return storageService.post(STORAGE_BOOK_KEY, book)
   }
+}
+
+function getEmptyBook(title = '', amount = '') {
+  return { title, listPrice: { amount } }
 }
 
 function getDefaultFilter() {
