@@ -5,6 +5,15 @@
   text-align: center;
 }
 
+.app-nav {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
+}
+
+.active {
+  color: greenyellow;
+}
+
 @media (max-width: 720px) {
   .app-header {
     color: var(--clr2bg);

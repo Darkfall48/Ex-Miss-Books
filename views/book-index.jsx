@@ -45,7 +45,7 @@ export function BookIndex() {
     <section className="book-index ">
       {!selectedBook && (
         <div>
-          <h1>Hello from Books Index!</h1>
+          {/* <h1>Hello from Books Index!</h1> */}
           <BookFilter onSetFilter={onSetFilter} />
           <BookList
             books={books}
