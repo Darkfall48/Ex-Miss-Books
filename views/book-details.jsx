@@ -1,15 +1,17 @@
 const { useEffect, useState } = React
 
-const { useParams, useNavigate } = ReactRouterDOM
+const { useParams, useNavigate, Link } = ReactRouterDOM
 
+import { Loader } from '../cmps/loader.jsx'
 import { LongTxt } from '../cmps/long-txt.jsx'
+
 import { bookService } from '../services/book.service.js'
 
 export function BookDetails() {
   const [book, setBook] = useState(null)
-  const params = useParams()
+  const { bookId } = useParams()
   const navigate = useNavigate()
-  console.log('Param:', params)
+  // console.log('Param:', params)
 
   useEffect(() => {
     loadBook()
@@ -19,7 +21,7 @@ export function BookDetails() {
 
   function loadBook() {
     bookService
-      .get(params.bookId)
+      .get(bookId)
       .then((book) => setBook(book))
       .catch((err) => {
         console.log('Had issue with:', err)
@@ -31,59 +33,66 @@ export function BookDetails() {
     navigate('/book')
   }
 
-  function checkBookReading() {
-    if (!book) console.log('No Book', book)
-    console.log('Book:', book)
+  function getPageCount() {
+    const { pageCount } = book
+    let pageCountStr = ''
 
-    let strPagesCount = ''
-    if (book.pageCount > 500)
-      strPagesCount = book.pageCount + ' Serious Reading'
-    else if (book.pageCount <= 500 && book.pageCount > 200)
-      strPagesCount = book.pageCount + ' Descent Reading'
-    else if (book.pageCount < 100)
-      strPagesCount = book.pageCount + ' Light Reading'
-    else strPagesCount = book.pageCount
-    return strPagesCount
+    if (pageCount > 500) pageCountStr = pageCount + ' - Serious Reading'
+    else if (pageCount <= 500 && pageCount > 200)
+      pageCountStr = pageCount + ' - Descent Reading'
+    else if (pageCount < 100) pageCountStr = pageCount + ' - Light Reading'
+    else pageCountStr = pageCount
+
+    return pageCountStr
   }
 
-  function checkBookPublishYear() {
-    let strPublishedAt = ''
-    if (date - book.publishedDate > 10)
-      strPublishedAt = book.publishedDate + ' Vintage'
-    else if (date - book.publishedDate <= 1)
-      strPublishedAt = book.publishedDate + ' New'
-    else strPublishedAt = book.publishedDate
-    return strPublishedAt
+  function getBookPublishedYear() {
+    const { publishedDate } = book
+    let publishedDateStr = ''
+
+    if (date - publishedDate > 10)
+      publishedDateStr = publishedDate + ' - Vintage'
+    else if (date - publishedDate <= 1)
+      publishedDateStr = publishedDate + ' - New'
+    else publishedDateStr = publishedDate
+
+    return publishedDateStr
   }
 
-  function checkBookPrice() {
-    let coloredClass = ''
-    if (book.listPrice.amount > 150) coloredClass = 'red'
-    else if (book.listPrice.amount < 20) coloredClass = 'green'
-    return coloredClass
+  function getBookPrice() {
+    if (book.listPrice.amount > 150) return 'red'
+    else if (book.listPrice.amount < 20) return 'green'
+
+    return ''
   }
 
-  if (!book) return <div>Loading...</div>
+  if (!book) return <Loader />
+
   return (
     <section className="book-details">
       <h2>{book.title}</h2>
       <h3>{book.subtitle}</h3>
-      <h3 className={`${checkBookPrice()}`}>
+      <h3 className={`${getBookPrice()}`}>
         {book.listPrice.amount} {book.listPrice.currencyCode}
       </h3>
+
       <h4>Authors: {book.authors.map((category) => category).join(', ')}</h4>
       <h4>
         Categories: {book.categories.map((category) => category).join(', ')}
       </h4>
-      <h4>Pages Count: {checkBookReading()}</h4>
+      <h4>Pages Count: {getPageCount()}</h4>
       <h4>Language: {book.language}</h4>
-      <h4>Published At: {checkBookPublishYear()}</h4>
+      <h4>Published At: {getBookPublishedYear()}</h4>
+
       {book.listPrice.isOnSale && (
         <h2 className="green">On Sale Right Now ! </h2>
       )}
-      <img src={book.thumbnail} />
+
+      <img src={book.thumbnail} alt={`${book.title}`} />
       <LongTxt txt={book.description} length={100} />
+
       <button onClick={onGoBack}>Go Back</button>
+      <Link to={`/book/edit/${book.id}`}>Edit me</Link>
     </section>
   )
 }
